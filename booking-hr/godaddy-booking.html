@@ -10,28 +10,32 @@
                           Leave blank to take bookings without a deposit.
 -->
 <div id="dcb">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-#dcb{--ink:#14202e;--muted:#5b6878;--line:#dde3ea;--brand:#0f3b5f;--accent:#0e8f7e;--soft:#e8f5f2;--warn:#fff6e0;--danger:#b42318;
-  font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);max-width:720px;margin:0 auto;padding:16px;box-sizing:border-box}
+#dcb{--ink:#1E1E24;--muted:#6E7180;--line:#D3D6E0;--brand:#000000;--accent:#3483FA;--accent-dark:#1F6FE5;--cyan:#22C3FF;--soft:#EDF4FF;--bg:#FAFBFF;--cloud:#EDEFF7;--warn:#FFF7E6;--danger:#D92D20;
+  --grad:linear-gradient(90deg,#3483FA,#22C3FF);
+  font:16px/1.55 Manrope,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg);max-width:720px;margin:0 auto;padding:20px 16px;box-sizing:border-box;border-radius:20px}
 #dcb *{box-sizing:border-box}
 #dcb .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
-#dcb h2{margin:0 0 12px;font-size:clamp(22px,5vw,28px);line-height:1.2;color:var(--brand)}
-#dcb h3{font-size:19px;margin:0 0 14px}
-#dcb .lang{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font-weight:600;cursor:pointer;color:var(--ink)}
+#dcb h2{margin:0;font-size:clamp(24px,5.5vw,32px);line-height:1.15;font-weight:800;letter-spacing:-.02em;color:var(--brand)}
+#dcb .tag{margin:4px 0 16px;font-weight:600;font-size:14px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+#dcb h3{font-size:20px;font-weight:800;letter-spacing:-.01em;margin:0 0 14px}
+#dcb .lang{border:1px solid var(--line);background:#fff;font-family:inherit;border-radius:999px;padding:6px 12px;font-weight:600;cursor:pointer;color:var(--ink)}
 #dcb .bar{display:flex;gap:6px;margin:0 0 16px}
 #dcb .bar i{flex:1;height:5px;border-radius:99px;background:var(--line)}
-#dcb .bar i.on{background:var(--accent)}
-#dcb .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px}
+#dcb .bar i.on{background:var(--grad)}
+#dcb .card{background:#fff;border:1px solid var(--cloud);border-radius:18px;padding:22px;box-shadow:0 1px 2px rgba(30,30,36,.04),0 8px 24px rgba(52,131,250,.06)}
 #dcb .gt{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:16px 0 8px}
 #dcb .gt:first-child{margin-top:0}
 #dcb .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
-#dcb .svc{text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:12px 14px;cursor:pointer;display:grid;grid-template-columns:32px 1fr;gap:2px 10px;color:var(--ink);font:inherit}
-#dcb .svc:hover,#dcb .svc:focus-visible{border-color:var(--accent);outline:none;background:var(--soft)}
+#dcb .svc{text-align:left;border:1.5px solid var(--cloud);background:#fff;border-radius:14px;transition:border-color .15s,background .15s,transform .15s;padding:12px 14px;cursor:pointer;display:grid;grid-template-columns:32px 1fr;gap:2px 10px;color:var(--ink);font:inherit}
+#dcb .svc:hover,#dcb .svc:focus-visible{border-color:var(--accent);outline:none;background:var(--soft);transform:translateY(-1px)}
 #dcb .svc .ico{font-size:24px;grid-row:span 2;line-height:1.2}
 #dcb .svc small{color:var(--muted);font-size:13px;line-height:1.35}
 #dcb label.f{display:block;margin-bottom:14px}
 #dcb label.f>span{display:block;font-weight:600;font-size:14px;margin-bottom:6px}
-#dcb input,#dcb textarea,#dcb select{width:100%;font:inherit;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+#dcb input,#dcb textarea,#dcb select{width:100%;font:inherit;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;color:var(--ink)}
 #dcb input:focus,#dcb textarea:focus,#dcb select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--soft)}
 #dcb .hint{margin:-8px 0 14px;color:var(--muted);font-size:13px}
 #dcb .ac{position:relative}
@@ -43,29 +47,30 @@
 #dcb legend{font-weight:600;font-size:14px;padding:0 4px}
 #dcb .opt{display:flex;gap:10px;align-items:flex-start;padding:6px 0;cursor:pointer}
 #dcb .opt input{width:18px;height:18px;margin-top:3px;flex:none;accent-color:var(--accent)}
-#dcb .price{border-radius:12px;background:var(--soft);border:1px solid #bfe3db;padding:16px;display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
-#dcb .pv{font-size:40px;font-weight:800;color:var(--brand);line-height:1.1;display:block}
+#dcb .price{border-radius:16px;background:var(--soft);border:1.5px solid transparent;background:linear-gradient(var(--soft),var(--soft)) padding-box,var(--grad) border-box;padding:16px;display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
+#dcb .pv{font-size:42px;font-weight:800;letter-spacing:-.02em;color:var(--brand);line-height:1.1;display:block}
 #dcb .muted{color:var(--muted);font-size:13px}
-#dcb .manual{border-radius:12px;background:var(--warn);border:1px solid #f0d58a;padding:14px 16px}
+#dcb .manual{border-radius:16px;background:var(--cloud);border:1px solid var(--line);padding:14px 16px}
 #dcb .days{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px;margin-bottom:14px}
 #dcb .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 #dcb .chip{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:8px 6px;text-align:center;cursor:pointer;font:inherit;color:var(--ink)}
 #dcb .chip small{display:block;color:var(--muted);font-size:12px}
 #dcb .chip.on{border-color:var(--accent);background:var(--soft);font-weight:700}
-#dcb .sum{background:#f6f7f9;border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:14px;display:grid;gap:3px}
-#dcb .sum b{color:var(--brand)}
+#dcb .sum{background:var(--cloud);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:14px;display:grid;gap:3px}
+#dcb .sum b{color:var(--ink)}
 #dcb .nav{display:flex;justify-content:space-between;gap:10px;margin-top:18px}
-#dcb .btn{background:var(--accent);color:#fff;border:0;border-radius:10px;padding:13px 20px;font:inherit;font-weight:700;cursor:pointer;flex:1;max-width:340px;margin-left:auto;text-align:center;text-decoration:none;display:inline-block}
-#dcb .btn[disabled]{opacity:.45;cursor:not-allowed}
-#dcb .ghost{background:none;border:1.5px solid var(--line);border-radius:10px;padding:12px 16px;font:inherit;cursor:pointer;color:var(--ink)}
+#dcb .btn{background:var(--accent);color:#fff;border:0;border-radius:12px;padding:14px 22px;font:inherit;font-weight:700;box-shadow:0 6px 16px rgba(52,131,250,.28);transition:background .15s;cursor:pointer;flex:1;max-width:340px;margin-left:auto;text-align:center;text-decoration:none;display:inline-block}
+#dcb .btn:hover{background:var(--accent-dark)}
+#dcb .btn[disabled]{opacity:.4;cursor:not-allowed;box-shadow:none}
+#dcb .ghost{background:#fff;border:1.5px solid var(--line);border-radius:12px;font-weight:600;padding:12px 16px;font:inherit;cursor:pointer;color:var(--ink)}
 #dcb .err{color:var(--danger);font-size:14px;margin:6px 0 0}
 #dcb .done{text-align:center;padding:28px 16px}
-#dcb .tick{width:56px;height:56px;border-radius:50%;background:var(--accent);color:#fff;font-size:30px;line-height:56px;margin:0 auto 12px}
+#dcb .tick{width:56px;height:56px;border-radius:50%;background:var(--grad);color:#fff;font-size:30px;line-height:56px;margin:0 auto 12px}
 #dcb [hidden]{display:none!important}
 @media (max-width:520px){#dcb .card{padding:16px}#dcb .price{grid-template-columns:1fr;gap:8px}#dcb .grid{grid-template-columns:1fr}}
 </style>
 
-<div class="top"><h2 data-t="title"></h2><button type="button" class="lang" id="dcbLang">EN</button></div>
+<div class="top"><div><h2 data-t="title"></h2><p class="tag" data-t="tagline"></p></div><button type="button" class="lang" id="dcbLang">EN</button></div>
 <div class="bar" id="dcbBar"></div>
 <div class="card" id="dcbBody"></div>
 </div>
@@ -125,9 +130,9 @@
 
   var T = {
     hr: {
-      title: 'Rezervirajte pregled online', s1: 'Što trebate pregledati?', s2: 'Gdje se nalazi nekretnina?', s3: 'Odaberite termin', s4: 'Vaši podaci',
+      title: 'Rezervirajte pregled online', tagline: 'Pregledajte s povjerenjem, gradite bez straha.', s1: 'Što trebate pregledati?', s2: 'Gdje se nalazi nekretnina?', s3: 'Odaberite termin', s4: 'Vaši podaci',
       groups: { curenje: 'Detekcija curenja', vlaga: 'Vlaga i plijesan', pregled: 'Pregledi nekretnina' },
-      addr: 'Adresa nekretnine', addrPh: 'Počnite upisivati ulicu i mjesto…', addrHint: 'Odaberite adresu s popisa da vidite cijenu.',
+      addr: 'Adresa nekretnine', addrPh: 'Počnite upisivati ulicu i mjesto…', addrHint: 'Odaberite adresu s popisa – cijenu vidite odmah, bez obveze.',
       noRes: 'Nema rezultata – pokušajte s ulicom i mjestom.', searchDown: 'Pretraga adresa ne radi – odaberite regiju ispod.',
       region: 'Regija', regionPick: 'Odaberite regiju…', other: 'Ostalo / nisam siguran',
       rep: 'Pisano izvješće', repYes: 'Da, želim pisano izvješće s fotografijama i preporukama', repNo: 'Ne, dovoljan mi je usmeni nalaz na licu mjesta',
@@ -143,9 +148,9 @@
       reqT: 'Zahtjev zaprimljen!', reqX: 'Javit ćemo vam se uskoro da potvrdimo termin.', quoteT: 'Hvala!', quoteX: 'Pripremamo vašu osobnu ponudu i javljamo se najkasnije sljedeći radni dan.', again: 'Nova rezervacija'
     },
     en: {
-      title: 'Book an inspection online', s1: 'What do you need inspected?', s2: 'Where is the property?', s3: 'Choose a time', s4: 'Your details',
+      title: 'Book an inspection online', tagline: 'Inspect Confidently, Build Fearlessly.', s1: 'What do you need inspected?', s2: 'Where is the property?', s3: 'Choose a time', s4: 'Your details',
       groups: { curenje: 'Leak detection', vlaga: 'Damp & mould', pregled: 'Property inspections' },
-      addr: 'Property address', addrPh: 'Start typing the street and town…', addrHint: 'Pick the address from the list to see your price.',
+      addr: 'Property address', addrPh: 'Start typing the street and town…', addrHint: 'Pick your address from the list – you see the price straight away, no obligation.',
       noRes: 'No results – try the street and town.', searchDown: 'Address search is down – pick the region below.',
       region: 'Region', regionPick: 'Choose a region…', other: 'Other / not sure',
       rep: 'Written report', repYes: 'Yes, I want a written report with photos and recommendations', repNo: 'No, findings explained on site are enough',
