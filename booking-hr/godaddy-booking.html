@@ -1,0 +1,406 @@
+<!--
+  DC Building Inspectors EU – online booking widget
+  Paste this whole file into GoDaddy Website Builder: Add Section → HTML → Custom code.
+
+  BEFORE GOING LIVE, fill in the CONFIG block below:
+    1. GHL_WEBHOOK_URL  – GoHighLevel (HR account) → Automation → new workflow →
+                          trigger "Inbound Webhook" → copy its URL here.
+    2. STRIPE_LINKS     – one Stripe Payment Link per deposit amount (8 links).
+                          Stripe → Payment Links → New → fixed price in EUR.
+                          Leave blank to take bookings without a deposit.
+-->
+<div id="dcb">
+<style>
+#dcb{--ink:#14202e;--muted:#5b6878;--line:#dde3ea;--brand:#0f3b5f;--accent:#0e8f7e;--soft:#e8f5f2;--warn:#fff6e0;--danger:#b42318;
+  font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);max-width:720px;margin:0 auto;padding:16px;box-sizing:border-box}
+#dcb *{box-sizing:border-box}
+#dcb .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+#dcb h2{margin:0 0 12px;font-size:clamp(22px,5vw,28px);line-height:1.2;color:var(--brand)}
+#dcb h3{font-size:19px;margin:0 0 14px}
+#dcb .lang{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font-weight:600;cursor:pointer;color:var(--ink)}
+#dcb .bar{display:flex;gap:6px;margin:0 0 16px}
+#dcb .bar i{flex:1;height:5px;border-radius:99px;background:var(--line)}
+#dcb .bar i.on{background:var(--accent)}
+#dcb .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px}
+#dcb .gt{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:16px 0 8px}
+#dcb .gt:first-child{margin-top:0}
+#dcb .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+#dcb .svc{text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:12px 14px;cursor:pointer;display:grid;grid-template-columns:32px 1fr;gap:2px 10px;color:var(--ink);font:inherit}
+#dcb .svc:hover,#dcb .svc:focus-visible{border-color:var(--accent);outline:none;background:var(--soft)}
+#dcb .svc .ico{font-size:24px;grid-row:span 2;line-height:1.2}
+#dcb .svc small{color:var(--muted);font-size:13px;line-height:1.35}
+#dcb label.f{display:block;margin-bottom:14px}
+#dcb label.f>span{display:block;font-weight:600;font-size:14px;margin-bottom:6px}
+#dcb input,#dcb textarea,#dcb select{width:100%;font:inherit;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+#dcb input:focus,#dcb textarea:focus,#dcb select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--soft)}
+#dcb .hint{margin:-8px 0 14px;color:var(--muted);font-size:13px}
+#dcb .ac{position:relative}
+#dcb .sug{position:absolute;z-index:5;left:0;right:0;top:calc(100% + 4px);list-style:none;margin:0;padding:4px;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(20,32,46,.12);max-height:260px;overflow:auto}
+#dcb .sug li{padding:10px 12px;border-radius:8px;cursor:pointer}
+#dcb .sug li:hover,#dcb .sug li.act{background:var(--soft)}
+#dcb .sug li.empty{color:var(--muted);cursor:default}
+#dcb fieldset{border:1px solid var(--line);border-radius:12px;padding:10px 14px 12px;margin:0 0 14px}
+#dcb legend{font-weight:600;font-size:14px;padding:0 4px}
+#dcb .opt{display:flex;gap:10px;align-items:flex-start;padding:6px 0;cursor:pointer}
+#dcb .opt input{width:18px;height:18px;margin-top:3px;flex:none;accent-color:var(--accent)}
+#dcb .price{border-radius:12px;background:var(--soft);border:1px solid #bfe3db;padding:16px;display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
+#dcb .pv{font-size:40px;font-weight:800;color:var(--brand);line-height:1.1;display:block}
+#dcb .muted{color:var(--muted);font-size:13px}
+#dcb .manual{border-radius:12px;background:var(--warn);border:1px solid #f0d58a;padding:14px 16px}
+#dcb .days{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px;margin-bottom:14px}
+#dcb .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#dcb .chip{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:8px 6px;text-align:center;cursor:pointer;font:inherit;color:var(--ink)}
+#dcb .chip small{display:block;color:var(--muted);font-size:12px}
+#dcb .chip.on{border-color:var(--accent);background:var(--soft);font-weight:700}
+#dcb .sum{background:#f6f7f9;border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:14px;display:grid;gap:3px}
+#dcb .sum b{color:var(--brand)}
+#dcb .nav{display:flex;justify-content:space-between;gap:10px;margin-top:18px}
+#dcb .btn{background:var(--accent);color:#fff;border:0;border-radius:10px;padding:13px 20px;font:inherit;font-weight:700;cursor:pointer;flex:1;max-width:340px;margin-left:auto;text-align:center;text-decoration:none;display:inline-block}
+#dcb .btn[disabled]{opacity:.45;cursor:not-allowed}
+#dcb .ghost{background:none;border:1.5px solid var(--line);border-radius:10px;padding:12px 16px;font:inherit;cursor:pointer;color:var(--ink)}
+#dcb .err{color:var(--danger);font-size:14px;margin:6px 0 0}
+#dcb .done{text-align:center;padding:28px 16px}
+#dcb .tick{width:56px;height:56px;border-radius:50%;background:var(--accent);color:#fff;font-size:30px;line-height:56px;margin:0 auto 12px}
+#dcb [hidden]{display:none!important}
+@media (max-width:520px){#dcb .card{padding:16px}#dcb .price{grid-template-columns:1fr;gap:8px}#dcb .grid{grid-template-columns:1fr}}
+</style>
+
+<div class="top"><h2 data-t="title"></h2><button type="button" class="lang" id="dcbLang">EN</button></div>
+<div class="bar" id="dcbBar"></div>
+<div class="card" id="dcbBody"></div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  // ====================== CONFIG – edit these ======================
+  var CONFIG = {
+    GHL_WEBHOOK_URL: '',            // GoHighLevel inbound webhook URL
+    PHONE: '',                      // shown on the "we'll call you" screens, e.g. '+385 91 234 5678'
+    VAT_PCT: 25,
+    REPORT_ADD: 60,                 // written report, € ex PDV
+    DEPOSIT_PCT: 10,
+    // Region prices, € ex PDV, matched on the county (županija) of the address.
+    // null = always "we'll send a personal quote".
+    ZONES: [
+      { match: 'grad zagreb',            price: 220 },
+      { match: 'zagrebacka',             price: 220 },
+      { match: 'primorsko-goranska',     price: 320 },  // Rijeka
+      { match: 'istarska',               price: 420 },  // Istra
+      { match: 'zadarska',               price: 420 },  // Zadar
+      { match: 'splitsko-dalmatinska',   price: 520 },  // Split
+      { match: 'dubrovacko-neretvanska', price: null }  // Dubrovnik -> quote
+    ],
+    // Other counties: priced by road distance from Zagreb. Past the last band -> quote.
+    BANDS: [ { km: 80, price: 220 }, { km: 220, price: 320 }, { km: 330, price: 420 }, { km: 450, price: 520 } ],
+    ISLANDS_QUOTE: true,            // ferry islands -> personal quote
+    // One Stripe Payment Link per deposit amount (10% of the price incl. PDV).
+    STRIPE_LINKS: {
+      '27.50': '',  // 275 € – Zagreb, no report
+      '35.00': '',  // 350 € – Zagreb, with report
+      '40.00': '',  // 400 € – Rijeka, no report
+      '47.50': '',  // 475 € – Rijeka, with report
+      '52.50': '',  // 525 € – Istra / Zadar, no report
+      '60.00': '',  // 600 € – Istra / Zadar, with report
+      '65.00': '',  // 650 € – Split, no report
+      '72.50': ''   // 725 € – Split, with report
+    }
+  };
+  // =================================================================
+
+  var SERVICES = [
+    { id: 'vlaga', g: 'vlaga', i: '💧', hr: ['Ispitivanje uzroka vlage', 'Termovizija i mjerenje vlage da pronađemo pravi uzrok.'], en: ['Moisture source investigation', 'Thermal imaging and moisture mapping to find the real cause.'] },
+    { id: 'plijesan', g: 'vlaga', i: '🦠', hr: ['Dijagnostika vlage i plijesni', 'Pregled plijesni, izvora vlage i preporuke za sanaciju.'], en: ['Damp & mould diagnostics', 'Mould inspection, moisture sources and repair advice.'] },
+    { id: 'balkon', g: 'curenje', i: '🏢', hr: ['Curenje – balkon / terasa', 'Gdje voda prodire kroz hidroizolaciju balkona ili terase.'], en: ['Leak – balcony / terrace', 'Where water gets through balcony or terrace waterproofing.'] },
+    { id: 'krov', g: 'curenje', i: '🏠', hr: ['Curenje – krov', 'Pregled krova, opšava i potkrovlja s termovizijom.'], en: ['Leak – roof', 'Roof, flashing and roof-space check with thermal imaging.'] },
+    { id: 'cijevi', g: 'curenje', i: '🔧', hr: ['Curenje – cijevi (voda / grijanje)', 'Lociramo curenje bez nepotrebnog razbijanja.'], en: ['Leak – pipes (water / heating)', 'We locate the leak without needless breaking.'] },
+    { id: 'prozor', g: 'curenje', i: '🪟', hr: ['Curenje – prozori i vrata', 'Prodor vode oko prozora, vrata i spojeva.'], en: ['Leak – windows & doors', 'Water getting in around windows, doors and joints.'] },
+    { id: 'kupaonica', g: 'curenje', i: '🚿', hr: ['Curenje – tuš / kupaonica', 'Test plavljenja i provjera hidroizolacije.'], en: ['Leak – shower / bathroom', 'Flood test and waterproofing check.'] },
+    { id: 'kupnja', g: 'pregled', i: '🔍', report: true, hr: ['Pregled nekretnine prije kupnje', 'Saznajte sve nedostatke prije nego potpišete.'], en: ['Pre-purchase property inspection', 'Know every defect before you sign.'] }
+  ];
+  var COASTAL = ['splitsko-dalmatinska', 'dubrovacko-neretvanska', 'zadarska', 'sibensko-kninska', 'primorsko-goranska', 'licko-senjska'];
+  var ISLAND_PLACES = 'hvar,stari grad,jelsa,sucuraj,vrboska,vrbanj,svirce,brac,supetar,bol,postira,pucisca,selca,milna,nerezisca,sutivan,sumartin,splitska,povlja,lozisca,donji humac,skrip,korcula,vela luka,blato,smokvica,lumbarda,racisce,cara,pupnat,zrnovo,vis,komiza,solta,grohote,rogac,maslinica,stomorska,necujam,mljet,babino polje,sobra,polace,pomena,lastovo,ubli,cres,martinscica,valun,losinj,mali losinj,veli losinj,nerezine,rab,lopar,barbat,kampor,banjol,palit,supetarska draga,ugljan,preko,kali,kukljica,lukoran,sutomiscica,pasman,tkon,dobropoljana,nevidane,zdrelac,mrljane,dugi otok,sali,bozava,brbinj,iz,veli iz,mali iz,silba,olib,molat,ist,susak,unije,ilovik,sipan,lopud,kolocep,zlarin,prvic,zirje,kaprije'.split(',');
+  var BASE = { lat: 45.815, lng: 15.9819 }; // Zagreb
+
+  var T = {
+    hr: {
+      title: 'Rezervirajte pregled online', s1: 'Što trebate pregledati?', s2: 'Gdje se nalazi nekretnina?', s3: 'Odaberite termin', s4: 'Vaši podaci',
+      groups: { curenje: 'Detekcija curenja', vlaga: 'Vlaga i plijesan', pregled: 'Pregledi nekretnina' },
+      addr: 'Adresa nekretnine', addrPh: 'Počnite upisivati ulicu i mjesto…', addrHint: 'Odaberite adresu s popisa da vidite cijenu.',
+      noRes: 'Nema rezultata – pokušajte s ulicom i mjestom.', searchDown: 'Pretraga adresa ne radi – odaberite regiju ispod.',
+      region: 'Regija', regionPick: 'Odaberite regiju…', other: 'Ostalo / nisam siguran',
+      rep: 'Pisano izvješće', repYes: 'Da, želim pisano izvješće s fotografijama i preporukama', repNo: 'Ne, dovoljan mi je usmeni nalaz na licu mjesta',
+      price: 'Vaša cijena', vat: 'PDV uključen', dep: 'Polog za rezervaciju:', rest: 'Ostatak plaćate nakon obavljene usluge.',
+      manualT: 'Za ovu lokaciju šaljemo osobnu ponudu', manualX: 'Ostavite podatke i javit ćemo vam se s cijenom i terminom, najkasnije sljedeći radni dan.',
+      back: 'Natrag', next: 'Nastavi', am: 'Prijepodne', amS: '8–12 h', pm: 'Poslijepodne', pmS: '12–17 h', pick: 'Dio dana',
+      name: 'Ime i prezime', email: 'E-mail', phone: 'Mobitel', notes: 'Opišite problem (neobavezno)', notesPh: 'Npr. mrlja na stropu ispod balkona nakon kiše…',
+      consent: 'Slažem se da DC Building Inspectors obrađuje moje podatke radi dogovora i izvršenja usluge.',
+      pay: 'Rezerviraj i plati polog', send: 'Pošalji zahtjev', sService: 'Usluga', sAddr: 'Adresa', sWhen: 'Termin', sPrice: 'Cijena', sDep: 'Polog',
+      withR: 's pisanim izvješćem', noR: 'bez pisanog izvješća',
+      eName: 'Upišite ime i prezime.', eEmail: 'Provjerite e-mail adresu.', ePhone: 'Provjerite broj mobitela.', eConsent: 'Potrebna je vaša suglasnost.', eSend: 'Slanje nije uspjelo. Pokušajte ponovno ili nas nazovite.',
+      payT: 'Još samo plaćanje pologa', payX: 'Otvorit će se sigurna Stripe stranica za plaćanje. Termin potvrđujemo čim polog bude plaćen.', payBtn: 'Plati polog',
+      reqT: 'Zahtjev zaprimljen!', reqX: 'Javit ćemo vam se uskoro da potvrdimo termin.', quoteT: 'Hvala!', quoteX: 'Pripremamo vašu osobnu ponudu i javljamo se najkasnije sljedeći radni dan.', again: 'Nova rezervacija'
+    },
+    en: {
+      title: 'Book an inspection online', s1: 'What do you need inspected?', s2: 'Where is the property?', s3: 'Choose a time', s4: 'Your details',
+      groups: { curenje: 'Leak detection', vlaga: 'Damp & mould', pregled: 'Property inspections' },
+      addr: 'Property address', addrPh: 'Start typing the street and town…', addrHint: 'Pick the address from the list to see your price.',
+      noRes: 'No results – try the street and town.', searchDown: 'Address search is down – pick the region below.',
+      region: 'Region', regionPick: 'Choose a region…', other: 'Other / not sure',
+      rep: 'Written report', repYes: 'Yes, I want a written report with photos and recommendations', repNo: 'No, findings explained on site are enough',
+      price: 'Your price', vat: 'VAT (PDV) included', dep: 'Deposit to book:', rest: 'You pay the rest after the service.',
+      manualT: 'We send a personal quote for this location', manualX: 'Leave your details and we will contact you with a price and time by the next working day.',
+      back: 'Back', next: 'Continue', am: 'Morning', amS: '8am–12pm', pm: 'Afternoon', pmS: '12–5pm', pick: 'Time of day',
+      name: 'Full name', email: 'Email', phone: 'Mobile', notes: 'Describe the problem (optional)', notesPh: 'E.g. stain on the ceiling under the balcony after rain…',
+      consent: 'I agree that DC Building Inspectors may process my details to arrange and carry out the service.',
+      pay: 'Book and pay deposit', send: 'Send request', sService: 'Service', sAddr: 'Address', sWhen: 'When', sPrice: 'Price', sDep: 'Deposit',
+      withR: 'with written report', noR: 'without written report',
+      eName: 'Please enter your full name.', eEmail: 'Please check your email.', ePhone: 'Please check your mobile number.', eConsent: 'We need your consent.', eSend: 'Sending failed. Please try again or call us.',
+      payT: 'Last step: pay the deposit', payX: 'A secure Stripe payment page will open. We confirm your time as soon as the deposit is paid.', payBtn: 'Pay deposit',
+      reqT: 'Request received!', reqX: 'We will be in touch shortly to confirm your time.', quoteT: 'Thank you!', quoteX: 'We are preparing your personal quote and will contact you by the next working day.', again: 'New booking'
+    }
+  };
+  // Fallback region list if the address search is unavailable.
+  var REGIONS = [
+    { id: 'zg', hr: 'Zagreb i okolica', en: 'Zagreb area', region: 'grad zagreb' },
+    { id: 'ri', hr: 'Rijeka i Primorje', en: 'Rijeka & coast', region: 'primorsko-goranska' },
+    { id: 'is', hr: 'Istra', en: 'Istria', region: 'istarska' },
+    { id: 'zd', hr: 'Zadar', en: 'Zadar', region: 'zadarska' },
+    { id: 'st', hr: 'Split', en: 'Split', region: 'splitsko-dalmatinska' },
+    { id: 'ot', hr: 'Otok', en: 'Island', island: true },
+    { id: 'x', hr: null, en: null, quote: true }
+  ];
+
+  var root = document.getElementById('dcb');
+  var body = document.getElementById('dcbBody');
+  var S = { lang: 'hr', step: 0, svc: null, place: null, report: true, q: null, date: null, win: null };
+  var t = function (k) { return T[S.lang][k]; };
+  var $ = function (s) { return root.querySelector(s); };
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var norm = function (s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').trim(); };
+  var eur = function (n) { return new Intl.NumberFormat(S.lang === 'en' ? 'en-IE' : 'hr-HR', { style: 'currency', currency: 'EUR', minimumFractionDigits: n % 1 ? 2 : 0 }).format(n); };
+  var svcName = function (s) { return s[S.lang][0]; };
+
+  // ---------- pricing ----------
+  function km(lat, lng) {
+    var r = function (d) { return d * Math.PI / 180; };
+    var a = Math.pow(Math.sin(r(lat - BASE.lat) / 2), 2) + Math.cos(r(BASE.lat)) * Math.cos(r(lat)) * Math.pow(Math.sin(r(lng - BASE.lng) / 2), 2);
+    return 2 * 6371 * Math.asin(Math.sqrt(a)) * 1.3; // approx. road km
+  }
+  function quote() {
+    var p = S.place;
+    if (!p || p.quote) return { manual: true };
+    if (p.island && CONFIG.ISLANDS_QUOTE) return { manual: true };
+    var region = norm(p.region), base, i;
+    for (i = 0; i < CONFIG.ZONES.length; i++) {
+      if (region.indexOf(norm(CONFIG.ZONES[i].match)) !== -1) { base = CONFIG.ZONES[i].price; if (base === null) return { manual: true }; break; }
+    }
+    if (base === undefined) {
+      if (p.lat == null) return { manual: true };
+      var d = km(p.lat, p.lng);
+      for (i = 0; i < CONFIG.BANDS.length; i++) if (d <= CONFIG.BANDS[i].km) { base = CONFIG.BANDS[i].price; break; }
+      if (base === undefined) return { manual: true };
+    }
+    var withR = S.svc.report || S.report;
+    var gross = Math.round((base + (withR ? CONFIG.REPORT_ADD : 0)) * (1 + CONFIG.VAT_PCT / 100) * 100) / 100;
+    var total = Math.ceil(gross / 5 - 1e-9) * 5;
+    return { manual: false, total: total, deposit: Math.round(total * CONFIG.DEPOSIT_PCT) / 100, withR: withR };
+  }
+
+  // ---------- address search (OpenStreetMap / Photon, no key needed) ----------
+  function isIsland(pr) {
+    var reg = norm((pr.state || '') + ' ' + (pr.county || ''));
+    if (!COASTAL.some(function (c) { return reg.indexOf(c) !== -1; })) return false;
+    return [pr.city, pr.name, pr.district, pr.locality].some(function (v) { return v && ISLAND_PLACES.indexOf(norm(v)) !== -1; });
+  }
+  function toPlace(f) {
+    var pr = f.properties || {}, c = (f.geometry || {}).coordinates || [];
+    var street = [pr.street || (pr.type === 'house' ? pr.name : ''), pr.housenumber].filter(Boolean).join(' ');
+    var first = street || pr.name, town = [pr.postcode, pr.city || pr.locality].filter(Boolean).join(' ');
+    return { label: [first, town !== first ? town : null].filter(Boolean).join(', '), lat: c[1], lng: c[0],
+      region: [pr.state, pr.county, pr.city].filter(Boolean).join(', '), island: isIsland(pr) };
+  }
+  var acTimer, acSeq = 0, acItems = [];
+  function search(q, cb) {
+    var seq = ++acSeq;
+    fetch('https://photon.komoot.io/api/?limit=6&bbox=13.2,42.3,19.5,46.6&q=' + encodeURIComponent(q))
+      .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .then(function (d) {
+        if (seq !== acSeq) return;
+        var seen = {};
+        cb(null, (d.features || []).filter(function (f) { return (f.properties || {}).countrycode === 'HR'; }).map(toPlace)
+          .filter(function (p) { return p.label && !seen[p.label] && (seen[p.label] = 1); }));
+      })
+      .catch(function () { if (seq === acSeq) cb(true); });
+  }
+
+  // ---------- rendering ----------
+  function bar() {
+    var h = ''; for (var i = 0; i < 4; i++) h += '<i class="' + (i <= S.step ? 'on' : '') + '"></i>';
+    $('#dcbBar').innerHTML = h;
+  }
+  function go(step) { S.step = step; bar(); [vService, vAddress, vTime, vContact][step](); try { root.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) {} }
+
+  function vService() {
+    var groups = {}; SERVICES.forEach(function (s) { (groups[s.g] = groups[s.g] || []).push(s); });
+    var h = '<h3>' + t('s1') + '</h3>';
+    Object.keys(groups).forEach(function (g) {
+      h += '<p class="gt">' + t('groups')[g] + '</p><div class="grid">' + groups[g].map(function (s) {
+        return '<button type="button" class="svc" data-id="' + s.id + '"><span class="ico">' + s.i + '</span><strong>' + esc(s[S.lang][0]) + '</strong><small>' + esc(s[S.lang][1]) + '</small></button>';
+      }).join('') + '</div>';
+    });
+    body.innerHTML = h;
+    body.querySelectorAll('.svc').forEach(function (b) {
+      b.onclick = function () { S.svc = SERVICES.filter(function (s) { return s.id === b.dataset.id; })[0]; go(1); };
+    });
+  }
+
+  function vAddress() {
+    body.innerHTML =
+      '<h3>' + t('s2') + '</h3><p class="muted" style="margin:-6px 0 14px">' + S.svc.i + ' ' + esc(svcName(S.svc)) + '</p>' +
+      '<label class="f"><span>' + t('addr') + '</span><div class="ac"><input id="dcbAddr" autocomplete="off" placeholder="' + esc(t('addrPh')) + '" value="' + esc(S.place && S.place.label || '') + '"><ul class="sug" id="dcbSug" hidden></ul></div></label>' +
+      '<p class="hint" id="dcbHint">' + t('addrHint') + '</p>' +
+      '<label class="f" id="dcbRegWrap" hidden><span>' + t('region') + '</span><select id="dcbReg"><option value="">' + t('regionPick') + '</option>' +
+        REGIONS.map(function (r) { return '<option value="' + r.id + '">' + esc(r[S.lang] || t('other')) + '</option>'; }).join('') + '</select></label>' +
+      (S.svc.report ? '' : '<fieldset><legend>' + t('rep') + '</legend><label class="opt"><input type="radio" name="dcbRep" value="1"' + (S.report ? ' checked' : '') + '> <span>' + t('repYes') + '</span></label><label class="opt"><input type="radio" name="dcbRep" value="0"' + (S.report ? '' : ' checked') + '> <span>' + t('repNo') + '</span></label></fieldset>') +
+      '<div id="dcbPrice"></div>' +
+      '<div class="nav"><button type="button" class="ghost" id="dcbBack">' + t('back') + '</button><button type="button" class="btn" id="dcbNext" disabled>' + t('next') + '</button></div>';
+
+    var input = $('#dcbAddr'), sug = $('#dcbSug'), act = -1;
+    function close() { sug.hidden = true; act = -1; }
+    function choose(p) { S.place = p; input.value = p.label; close(); price(); }
+    input.oninput = function () {
+      S.place = null; price(); clearTimeout(acTimer);
+      var q = input.value.trim(); if (q.length < 3) return close();
+      acTimer = setTimeout(function () {
+        search(q, function (err, list) {
+          if (err) { sug.innerHTML = '<li class="empty">' + t('searchDown') + '</li>'; sug.hidden = false; $('#dcbRegWrap').hidden = false; return; }
+          acItems = list;
+          sug.innerHTML = list.length ? list.map(function (p, i) { return '<li data-i="' + i + '">' + esc(p.label) + '</li>'; }).join('') : '<li class="empty">' + t('noRes') + '</li>';
+          sug.hidden = false;
+        });
+      }, 300);
+    };
+    input.onkeydown = function (e) {
+      if (sug.hidden || !acItems.length) return;
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault(); act = (act + (e.key === 'ArrowDown' ? 1 : -1) + acItems.length) % acItems.length;
+        sug.querySelectorAll('li').forEach(function (li, i) { li.classList.toggle('act', i === act); });
+      } else if (e.key === 'Enter' && act >= 0) { e.preventDefault(); choose(acItems[act]); }
+      else if (e.key === 'Escape') close();
+    };
+    sug.onmousedown = function (e) { var li = e.target.closest('li[data-i]'); if (li) { e.preventDefault(); choose(acItems[+li.dataset.i]); } };
+    input.onblur = function () { setTimeout(close, 150); };
+    $('#dcbReg').onchange = function () {
+      var r = REGIONS.filter(function (x) { return x.id === this.value; }, this)[0];
+      S.place = r ? { label: input.value.trim() || r[S.lang] || t('other'), region: r.region || '', island: !!r.island, quote: !!r.quote } : null;
+      price();
+    };
+    body.querySelectorAll('input[name=dcbRep]').forEach(function (r) { r.onchange = function () { S.report = r.value === '1'; price(); }; });
+    $('#dcbBack').onclick = function () { go(0); };
+    $('#dcbNext').onclick = function () { S.q.manual ? go(3) : go(2); };
+    price();
+  }
+
+  function price() {
+    var box = $('#dcbPrice'), next = $('#dcbNext');
+    if (!box) return;
+    if (!S.place) { S.q = null; box.innerHTML = ''; next.disabled = true; $('#dcbHint').hidden = false; return; }
+    S.q = quote(); $('#dcbHint').hidden = true; next.disabled = false;
+    box.innerHTML = S.q.manual
+      ? '<div class="manual"><strong>' + t('manualT') + '</strong><p style="margin:4px 0 0">' + t('manualX') + '</p></div>'
+      : '<div class="price"><div><span class="muted">' + t('price') + '</span><span class="pv">' + eur(S.q.total) + '</span><span class="muted">' + t('vat') + '</span></div>' +
+        '<div style="font-size:14px">' + t('dep') + ' <strong>' + eur(S.q.deposit) + ' (' + CONFIG.DEPOSIT_PCT + '%)</strong><br>' + t('rest') + '</div></div>';
+  }
+
+  function vTime() {
+    var days = [], d = new Date(); d.setHours(12, 0, 0, 0);
+    while (days.length < 15) { d.setDate(d.getDate() + 1); if (d.getDay() % 6) days.push(new Date(d)); }
+    var fmt = function (x, o) { return new Intl.DateTimeFormat(S.lang === 'en' ? 'en-GB' : 'hr-HR', o).format(x); };
+    var iso = function (x) { return x.getFullYear() + '-' + ('0' + (x.getMonth() + 1)).slice(-2) + '-' + ('0' + x.getDate()).slice(-2); };
+    body.innerHTML = '<h3>' + t('s3') + '</h3><div class="days">' + days.map(function (x) {
+      return '<button type="button" class="chip' + (S.date === iso(x) ? ' on' : '') + '" data-d="' + iso(x) + '"><small>' + fmt(x, { weekday: 'short' }) + '</small>' + fmt(x, { day: 'numeric', month: 'numeric' }) + '</button>';
+    }).join('') + '</div><p class="gt">' + t('pick') + '</p><div class="two">' +
+      ['am', 'pm'].map(function (w) { return '<button type="button" class="chip' + (S.win === w ? ' on' : '') + '" data-w="' + w + '">' + t(w) + '<small>' + t(w + 'S') + '</small></button>'; }).join('') +
+      '</div><div class="nav"><button type="button" class="ghost" id="dcbBack">' + t('back') + '</button><button type="button" class="btn" id="dcbNext"' + (S.date && S.win ? '' : ' disabled') + '>' + t('next') + '</button></div>';
+    body.querySelectorAll('[data-d],[data-w]').forEach(function (b) {
+      b.onclick = function () {
+        if (b.dataset.d) S.date = b.dataset.d; else S.win = b.dataset.w;
+        body.querySelectorAll(b.dataset.d ? '[data-d]' : '[data-w]').forEach(function (c) { c.classList.toggle('on', c === b); });
+        $('#dcbNext').disabled = !(S.date && S.win);
+      };
+    });
+    $('#dcbBack').onclick = function () { go(1); };
+    $('#dcbNext').onclick = function () { go(3); };
+  }
+
+  function whenText() {
+    if (!S.date) return '';
+    return new Intl.DateTimeFormat(S.lang === 'en' ? 'en-GB' : 'hr-HR', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(S.date + 'T12:00:00')) + ', ' + t(S.win);
+  }
+
+  function vContact() {
+    var q = S.q, rows = [[t('sService'), svcName(S.svc)], [t('sAddr'), S.place.label]];
+    if (!q.manual) rows.push([t('sWhen'), whenText()], [t('sPrice'), eur(q.total) + ' · ' + (q.withR ? t('withR') : t('noR'))], [t('sDep'), eur(q.deposit)]);
+    var link = !q.manual && CONFIG.STRIPE_LINKS[q.deposit.toFixed(2)];
+    body.innerHTML = '<h3>' + t('s4') + '</h3><div class="sum">' + rows.map(function (r) { return '<div><span class="muted">' + esc(r[0]) + ':</span> <b>' + esc(r[1]) + '</b></div>'; }).join('') + '</div>' +
+      '<form id="dcbForm" novalidate>' +
+      '<label class="f"><span>' + t('name') + '</span><input name="name" autocomplete="name"></label>' +
+      '<label class="f"><span>' + t('email') + '</span><input name="email" type="email" autocomplete="email"></label>' +
+      '<label class="f"><span>' + t('phone') + '</span><input name="phone" type="tel" autocomplete="tel" placeholder="+385 9x xxx xxxx"></label>' +
+      '<label class="f"><span>' + t('notes') + '</span><textarea name="notes" rows="3" placeholder="' + esc(t('notesPh')) + '"></textarea></label>' +
+      '<label class="opt"><input type="checkbox" name="consent"> <span>' + t('consent') + '</span></label>' +
+      '<p class="err" id="dcbErr" hidden></p>' +
+      '<div class="nav"><button type="button" class="ghost" id="dcbBack">' + t('back') + '</button><button type="submit" class="btn" id="dcbSubmit">' + (link ? t('pay') : t('send')) + '</button></div></form>';
+    $('#dcbBack').onclick = function () { go(q.manual ? 1 : 2); };
+    $('#dcbForm').onsubmit = function (e) {
+      e.preventDefault();
+      var f = e.target, err = $('#dcbErr'), v = {
+        name: f.name.value.trim(), email: f.email.value.trim(), phone: f.phone.value.trim(), notes: f.notes.value.trim().slice(0, 1000)
+      };
+      var problem = v.name.length < 2 ? 'eName' : !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.email) ? 'eEmail' : !/^[+0-9 ()\/-]{6,20}$/.test(v.phone) ? 'ePhone' : !f.consent.checked ? 'eConsent' : null;
+      if (problem) { err.textContent = t(problem); err.hidden = false; return; }
+      err.hidden = true;
+      var id = 'WEB-' + Date.now().toString(36).toUpperCase();
+      var payload = {
+        booking_id: id, name: v.name, email: v.email, phone: v.phone, notes: v.notes, language: S.lang,
+        service: S.svc.hr[0], service_id: S.svc.id, address: S.place.label,
+        is_island: S.place.island ? 'da' : 'ne', manual_quote: q.manual ? 'da' : 'ne',
+        price_total_eur: q.manual ? '' : q.total, deposit_eur: q.manual ? '' : q.deposit,
+        written_report: q.manual ? '' : (q.withR ? 'da' : 'ne'),
+        preferred_date: S.date || '', preferred_time: S.win === 'am' ? 'prijepodne (8–12)' : S.win === 'pm' ? 'poslijepodne (12–17)' : '',
+        deposit_status: link ? 'čeka plaćanje' : 'bez pologa', page: location.href, referrer: document.referrer
+      };
+      var btn = $('#dcbSubmit'); btn.disabled = true;
+      send(payload).then(function () {
+        if (link) return vPay(link + (link.indexOf('?') === -1 ? '?' : '&') + 'prefilled_email=' + encodeURIComponent(v.email) + '&client_reference_id=' + id);
+        vDone(q.manual ? 'quote' : 'req');
+      }).catch(function () { btn.disabled = false; err.textContent = t('eSend'); err.hidden = false; });
+    };
+  }
+
+  function send(payload) {
+    if (!CONFIG.GHL_WEBHOOK_URL) { console.warn('[DC booking] GHL_WEBHOOK_URL not set. Booking:', payload); return Promise.resolve(); }
+    return fetch(CONFIG.GHL_WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+      .catch(function () {
+        // Fallback if the browser blocks the JSON request: send as a simple form post.
+        var form = new URLSearchParams(); Object.keys(payload).forEach(function (k) { form.append(k, payload[k]); });
+        return fetch(CONFIG.GHL_WEBHOOK_URL, { method: 'POST', mode: 'no-cors', body: form });
+      });
+  }
+
+  function vPay(url) {
+    body.innerHTML = '<div class="done"><h3>' + t('payT') + '</h3><p>' + t('payX') + '</p><a class="btn" style="max-width:none" href="' + esc(url) + '" target="_blank" rel="noopener">' + t('payBtn') + ' ' + eur(S.q.deposit) + '</a></div>';
+  }
+  function vDone(kind) {
+    S.step = 3; bar();
+    body.innerHTML = '<div class="done"><div class="tick">✓</div><h3>' + t(kind + 'T') + '</h3><p>' + t(kind + 'X') + (CONFIG.PHONE ? '<br>' + esc(CONFIG.PHONE) : '') + '</p><button type="button" class="ghost" id="dcbAgain">' + t('again') + '</button></div>';
+    $('#dcbAgain').onclick = function () { S = { lang: S.lang, step: 0, svc: null, place: null, report: true, q: null, date: null, win: null }; go(0); };
+  }
+
+  function text() { root.querySelectorAll('[data-t]').forEach(function (el) { el.textContent = t(el.dataset.t); }); $('#dcbLang').textContent = S.lang === 'hr' ? 'EN' : 'HR'; }
+  $('#dcbLang').onclick = function () { S.lang = S.lang === 'hr' ? 'en' : 'hr'; text(); go(S.step); };
+  text(); go(0);
+})();
+</script>
