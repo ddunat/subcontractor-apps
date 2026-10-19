@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Online rezervacija – DC Building Inspectors</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="wrap" id="app" aria-live="polite">
+    <header class="top">
+      <div>
+        <p class="eyebrow" data-t="eyebrow"></p>
+        <h1 data-t="title"></h1>
+      </div>
+      <button class="lang" id="langBtn" type="button" aria-label="Language">EN</button>
+    </header>
+    <div class="test-banner" id="testBanner" hidden data-t="testBanner"></div>
+
+    <ol class="steps" id="stepper" aria-label="Koraci"></ol>
+
+    <!-- 1. Service -->
+    <section class="step" id="step-service">
+      <h2 data-t="s1"></h2>
+      <div id="serviceGroups"></div>
+    </section>
+
+    <!-- 2. Address + price -->
+    <section class="step" id="step-address" hidden>
+      <h2 data-t="s2"></h2>
+      <p class="chosen" id="chosenService"></p>
+      <label class="field">
+        <span data-t="addressLabel"></span>
+        <div class="ac">
+          <input id="address" type="text" autocomplete="off" spellcheck="false" role="combobox"
+                 aria-autocomplete="list" aria-expanded="false" aria-controls="suggestions">
+          <ul id="suggestions" class="suggestions" role="listbox" hidden></ul>
+        </div>
+      </label>
+      <p class="hint" id="addressHint" data-t="addressHint"></p>
+
+      <fieldset class="report" id="reportBox" hidden>
+        <legend data-t="reportLegend"></legend>
+        <label class="radio"><input type="radio" name="report" value="yes" checked> <span data-t="reportYes"></span></label>
+        <label class="radio"><input type="radio" name="report" value="no"> <span data-t="reportNo"></span></label>
+      </fieldset>
+
+      <div class="price" id="priceCard" hidden>
+        <div class="price-main">
+          <span class="price-label" data-t="yourPrice"></span>
+          <span class="price-value" id="priceValue"></span>
+          <span class="price-vat" data-t="inclVat"></span>
+        </div>
+        <ul class="price-lines">
+          <li><span data-t="depositToday"></span> <strong id="depositValue"></strong></li>
+          <li><span data-t="restAfter"></span></li>
+          <li class="muted" id="validUntil"></li>
+        </ul>
+      </div>
+      <div class="manual" id="manualCard" hidden>
+        <strong data-t="manualTitle"></strong>
+        <p data-t="manualText"></p>
+      </div>
+
+      <div class="nav">
+        <button type="button" class="ghost" data-back data-t="back"></button>
+        <button type="button" class="primary" id="toSchedule" disabled data-t="continue"></button>
+      </div>
+    </section>
+
+    <!-- 3. Date / time -->
+    <section class="step" id="step-schedule" hidden>
+      <h2 data-t="s3"></h2>
+      <div class="days" id="days" role="radiogroup"></div>
+      <div id="timeBox"></div>
+      <div class="nav">
+        <button type="button" class="ghost" data-back data-t="back"></button>
+        <button type="button" class="primary" id="toContact" disabled data-t="continue"></button>
+      </div>
+    </section>
+
+    <!-- 4. Contact + pay -->
+    <section class="step" id="step-contact" hidden>
+      <h2 data-t="s4"></h2>
+      <div class="summary" id="summary"></div>
+      <form id="contactForm" novalidate>
+        <label class="field"><span data-t="name"></span><input name="name" autocomplete="name" required></label>
+        <label class="field"><span data-t="email"></span><input name="email" type="email" autocomplete="email" required></label>
+        <label class="field"><span data-t="phone"></span><input name="phone" type="tel" autocomplete="tel" placeholder="+385 9x xxx xxxx" required></label>
+        <label class="field"><span data-t="notes"></span><textarea name="notes" rows="3" data-tp="notesPh"></textarea></label>
+        <label class="check"><input type="checkbox" name="consent" required> <span data-t="consent"></span></label>
+        <p class="error" id="formError" role="alert" hidden></p>
+        <div class="nav">
+          <button type="button" class="ghost" data-back data-t="back"></button>
+          <button type="submit" class="primary" id="submitBtn"></button>
+        </div>
+        <p class="secure" data-t="secure"></p>
+      </form>
+    </section>
+
+    <!-- Done -->
+    <section class="step done" id="step-done" hidden>
+      <div class="tick" aria-hidden="true">✓</div>
+      <h2 id="doneTitle"></h2>
+      <p id="doneText"></p>
+      <button type="button" class="ghost" id="restart" data-t="restart"></button>
+    </section>
+  </main>
+  <script src="/app.js" defer></script>
+</body>
+</html>

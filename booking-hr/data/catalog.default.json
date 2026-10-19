@@ -1,0 +1,44 @@
+{
+  "_note": "Used only until the Google Sheet is connected. Zone prices are David's (19 Oct 2026). Band prices for unlisted regions and the Šibenik price are ESTIMATES to confirm.",
+  "settings": {
+    "base_name": "Zagreb",
+    "base_lat": 45.815,
+    "base_lng": 15.9819,
+    "road_factor": 1.3,
+    "vat_pct": 25,
+    "report_add_ex_vat": 60,
+    "island_mode": "quote",
+    "island_add_ex_vat": 0,
+    "deposit_pct": 10,
+    "round_to": 5,
+    "quote_valid_hours": 24,
+    "currency": "EUR"
+  },
+  "services": [
+    { "id": "vlaga", "group": "vlaga", "icon": "💧", "price_adj": 0, "name_hr": "Ispitivanje uzroka vlage", "name_en": "Moisture source investigation", "desc_hr": "Termovizija i mjerenje vlage da pronađemo pravi uzrok, ne samo simptom.", "desc_en": "Thermal imaging and moisture mapping to find the real cause, not just the symptom." },
+    { "id": "plijesan", "group": "vlaga", "icon": "🦠", "price_adj": 0, "name_hr": "Dijagnostika vlage i plijesni", "name_en": "Damp & mould diagnostics", "desc_hr": "Pregled plijesni, izvora vlage i preporuke za sanaciju.", "desc_en": "Mould inspection, moisture sources and repair recommendations." },
+    { "id": "balkon", "group": "curenje", "icon": "🏢", "price_adj": 0, "name_hr": "Curenje – balkon / terasa", "name_en": "Leak – balcony / terrace", "desc_hr": "Pronalazimo gdje voda prodire kroz hidroizolaciju balkona ili terase.", "desc_en": "We find where water gets through the balcony or terrace waterproofing." },
+    { "id": "krov", "group": "curenje", "icon": "🏠", "price_adj": 0, "name_hr": "Curenje – krov", "name_en": "Leak – roof", "desc_hr": "Pregled krova, opšava i potkrovlja s termovizijom.", "desc_en": "Roof, flashing and roof-space inspection with thermal imaging." },
+    { "id": "cijevi", "group": "curenje", "icon": "🔧", "price_adj": 0, "name_hr": "Curenje – cijevi (voda / grijanje)", "name_en": "Leak – pipes (water / heating)", "desc_hr": "Lociramo curenje bez nepotrebnog razbijanja zidova i podova.", "desc_en": "We locate the leak without needless breaking of walls and floors." },
+    { "id": "prozor", "group": "curenje", "icon": "🪟", "price_adj": 0, "name_hr": "Curenje – prozori i vrata", "name_en": "Leak – windows & doors", "desc_hr": "Prodor vode oko prozora, vrata i spojeva.", "desc_en": "Water getting in around windows, doors and joints." },
+    { "id": "kupaonica", "group": "curenje", "icon": "🚿", "price_adj": 0, "name_hr": "Curenje – tuš / kupaonica", "name_en": "Leak – shower / bathroom", "desc_hr": "Test plavljenja i provjera hidroizolacije kupaonice.", "desc_en": "Flood test and bathroom waterproofing check." },
+    { "id": "kupnja", "group": "pregled", "icon": "🔍", "price_adj": 0, "report_required": true, "name_hr": "Pregled nekretnine prije kupnje", "name_en": "Pre-purchase property inspection", "desc_hr": "Saznajte sve nedostatke prije nego potpišete.", "desc_en": "Know every defect before you sign." }
+  ],
+  "zones": [
+    { "match": "grad zagreb", "name": "Zagreb", "price_ex_vat": 220 },
+    { "match": "zagrebacka", "name": "Zagreb", "price_ex_vat": 220 },
+    { "match": "primorsko-goranska", "name": "Rijeka", "price_ex_vat": 320 },
+    { "match": "istarska", "name": "Istra", "price_ex_vat": 420 },
+    { "match": "zadarska", "name": "Zadar", "price_ex_vat": 420 },
+    { "match": "sibensko-kninska", "name": "Šibenik (ESTIMATE)", "price_ex_vat": 470 },
+    { "match": "splitsko-dalmatinska", "name": "Split", "price_ex_vat": 520 },
+    { "match": "dubrovacko-neretvanska", "name": "Dubrovnik", "price_ex_vat": null }
+  ],
+  "bands": [
+    { "max_km": 60, "price_ex_vat": 220 },
+    { "max_km": 120, "price_ex_vat": 270 },
+    { "max_km": 220, "price_ex_vat": 320 },
+    { "max_km": 320, "price_ex_vat": 420 },
+    { "max_km": 450, "price_ex_vat": 520 }
+  ]
+}

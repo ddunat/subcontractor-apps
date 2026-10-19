@@ -1,0 +1,21 @@
+{
+  "_note": "Places reached by ferry. Matched only when the address is in a coastal county, so 'Blato' in Zagreb is not treated as Korčula. Bridged islands (Krk, Pag, Vir, Čiovo, Murter) are left out on purpose.",
+  "coastal_counties": ["splitsko-dalmatinska", "dubrovacko-neretvanska", "zadarska", "sibensko-kninska", "primorsko-goranska", "licko-senjska"],
+  "places": [
+    "hvar", "stari grad", "jelsa", "sucuraj", "vrboska", "vrbanj", "svirce",
+    "brac", "supetar", "bol", "postira", "pucisca", "selca", "milna", "nerezisca", "sutivan", "sumartin", "splitska", "povlja", "lozisca", "donji humac", "skrip",
+    "korcula", "vela luka", "blato", "smokvica", "lumbarda", "racisce", "cara", "pupnat", "zrnovo",
+    "vis", "komiza",
+    "solta", "grohote", "rogac", "maslinica", "stomorska", "necujam",
+    "mljet", "babino polje", "sobra", "polace", "pomena",
+    "lastovo", "ubli",
+    "cres", "martinscica", "valun",
+    "losinj", "mali losinj", "veli losinj", "nerezine",
+    "rab", "lopar", "barbat", "kampor", "banjol", "palit", "supetarska draga",
+    "ugljan", "preko", "kali", "kukljica", "lukoran", "sutomiscica",
+    "pasman", "tkon", "dobropoljana", "nevidane", "zdrelac", "mrljane",
+    "dugi otok", "sali", "bozava", "brbinj",
+    "iz", "veli iz", "mali iz", "silba", "olib", "molat", "ist", "susak", "unije", "ilovik",
+    "sipan", "lopud", "kolocep", "zlarin", "prvic", "zirje", "kaprije"
+  ]
+}
